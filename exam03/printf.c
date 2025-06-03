@@ -56,7 +56,7 @@ int	print_d(int nb, int counts)
 	return counts;
 }
 
-int	print_x(unsigned int nb, int counts, const char *format)
+int	print_x(unsigned int nb, int counts, char format)
 {
 	int	ret = 0;
 	char *hexlow = "0123456789abcdef";
@@ -70,11 +70,11 @@ int	print_x(unsigned int nb, int counts, const char *format)
 			return (-1);
 	}
 	ret = nb % 16;
-	if (*format == 'x')
+	if (format == 'x')
 	{
 		c = hexlow[ret];
 	}
-	if (*format == 'X')
+	if (format == 'X')
 	{
 		c = hexupp[ret];
 	}
@@ -110,25 +110,24 @@ int	ft_printf(const char *format, ...)
 			}
 			else if (*format == 'x')
 			{
-				counts = print_x(va_arg(args, unsigned int), counts, format);
+				counts = print_x(va_arg(args, unsigned int), counts, *format);
 				if (counts == -1)
 					return -1;
 			}
-			format++;
 		}
 		else
 		{
 			if (write (1, format, 1) == -1)
 				return -1;
-			format++;
 			counts++;
 		}
-		
+		format++;
 	}
 	va_end(args);
 	return (counts);
 }
 
+#include <stdio.h>
 int main()
 {
 	int ret = ft_printf("%d", 123);
@@ -137,5 +136,11 @@ int main()
 	unsigned int a = 255;
 	char *str = "hello world";
 	ret = ft_printf("%s\n", str);
-	ft_printf("%s, %d, %x\n", str, ret, a);
+	ret = ft_printf("%s, %d, %x\n", str, ret, a);
+	ft_printf("len : %d\n", ret);
+
+	ret = ft_printf("%%\n");
+	ft_printf("len : %d\n", ret);
+
+	printf("%%\n");
 }
